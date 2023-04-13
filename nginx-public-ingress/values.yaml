@@ -1,0 +1,41 @@
+#jinja2:lstrip_blocks: True
+
+merge_domain_status: false
+service:
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+  type: LoadBalancer
+  nginx_public_ingress_ip: ""
+  nginx_private_ingress_ip: ""
+  
+  ports:
+  - port: 80
+    name: http
+    targetPort: 80
+    nodePort: 31380
+  - port: 443
+    name: https
+    targetPort: 443
+    nodePort: 31390
+
+domain:
+
+imagepullsecrets: ""
+dockerhub: docker.io
+
+resources:
+  requests:
+    cpu: '100m'
+    memory: '100Mi'
+  limits:
+    cpu: 1
+    memory: '1024Mi'
+
+repository: tsprasath91/proxy
+image_tag: release-5.1.0
+
+serviceMonitor:
+  enabled: false
+  labels: # labels with which the prometheus choose the serviceMonitor
+    app: prometheus-operator
+    release: prometheus-operator
