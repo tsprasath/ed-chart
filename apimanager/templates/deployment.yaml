@@ -55,7 +55,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kong
+  name: {{ .Chart.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Chart.Name }}
