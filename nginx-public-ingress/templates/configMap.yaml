@@ -169,7 +169,7 @@ data:
         proxy_cache_valid 200 4m;
         # Increasing the proxy buffer size
         proxy_buffer_size 16k;
-        proxy_busy_buffers_size 24k;
+        proxy_busy_buffers_size 16k;
         rewrite ^/api/(.*) /$1 break;
         proxy_set_header Connection "";
         proxy_set_header Host $host;
@@ -199,7 +199,7 @@ data:
         proxy_cache_valid 200 4m;
         # Increasing the proxy buffer size
         proxy_buffer_size 16k;
-        proxy_busy_buffers_size 24k;
+        proxy_busy_buffers_size 16k;
         rewrite ^/api/(.*) /$1 break;
         proxy_set_header Connection "";
         proxy_set_header Host $host;
@@ -428,10 +428,10 @@ data:
             add_header Content-Type text/plain;
             return 200;
         }
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf/contents";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -461,10 +461,10 @@ data:
             add_header Content-Type text/plain;
             return 200;
         }
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf/contents";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -508,10 +508,10 @@ data:
             add_header Content-Type text/plain;
             return 200;
         }
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -532,10 +532,10 @@ data:
         gzip_min_length 100000;
         gzip_proxied    expired no-cache no-store private auth;
         gzip_types application/javascript application/x-javascript text/css text/javascript;
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -565,10 +565,10 @@ data:
             add_header Content-Type text/plain;
             return 200;
         }
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -598,10 +598,10 @@ data:
             add_header Content-Type text/plain;
             return 200;
         }
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -635,10 +635,10 @@ data:
             add_header Content-Type text/plain;
             return 200;
         }
-        set $bucket        "https://storage.googleapis.com/dev-public-upsmf";
+        set $bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -695,10 +695,10 @@ data:
              add_header Content-Type text/plain;
              return 200;
         }
-        set $offline_bucket        "https://storage.googleapis.com/dev-public-upsmf/dev-offlineinstaller";
+        set $offline_bucket        "https://{{ .Values.cloud_public_storage_accountname }}/{{ .Values.cloud_public_storage_container }}/dev-offlineinstaller";
         set $url_full         '$1';
         proxy_http_version     1.1;
-        proxy_set_header       Host "storage.googleapis.com";
+        proxy_set_header       Host "{{ .Values.cloud_public_storage_accountname }}";
         proxy_set_header       Authorization '';
         proxy_hide_header      Access-Control-Allow-Origin;
         proxy_hide_header      Access-Control-Allow-Methods;
@@ -893,122 +893,13 @@ data:
         proxy_set_header X-Request-ID $sb_request_id;
         proxy_pass http://$dial_upstream_host;
       }
-      }
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nginx-conf
-  namespace: {{ .Release.namespace }}
-data:
-  nginx.conf: |
-    user  nginx;
-    worker_processes  auto;
-    error_log  /var/log/nginx/error.log warn;
-    pid        /var/run/nginx.pid;
-    events {
-        worker_connections  10000;
     }
-    http {
-        include       /etc/nginx/mime.types;
-        default_type  application/octet-stream;
-        resolver 10.155.80.10 valid=30s;
-        lua_load_resty_core off;
-        log_format  main  '$remote_addr - $remote_user [$time_local] '
-                          '"$request" $status $request_length $body_bytes_sent'
-                          ' $request_time $upstream_response_time $pipe'
-                          ' "$http_referer" "$http_user_agent" "$sb_request_id"'
-                          ' "$http_x_device_id" "$http_x_channel_id" "$http_x_app_id"'
-                          ' "$http_x_app_ver" "$http_x_session_id" ';
-        access_log  /var/log/nginx/access.log  main;
-        # Shared dictionary to store metrics
-        lua_shared_dict prometheus_metrics 100M;
-        lua_package_path "/etc/nginx/lua_modules/?.lua";
-        # Defining request_id
-        # If the client send request_id it should be preffered over the default one
-        map $http_x_request_id $sb_request_id {
-          default  $http_x_request_id;
-          ''  $request_id;
-        }
-        # Defining upstream cache status for nginx metrics
-        map $upstream_cache_status $cache_status {
-          default  $upstream_cache_status;
-          ''       "NONE";
-        }
-        map $http_accept $dial_upstream_host {
-          default                player;
-          application/ld+json    kong;
-        }
-        # Defining metrics
-        init_worker_by_lua_block {
-          prometheus = require("prometheus").init("prometheus_metrics")
-          metric_requests = prometheus:counter(
-            "nginx_http_requests_total", "Number of HTTP requests", {"host", "status", "request_method", "cache_status"})
-          metric_latency = prometheus:histogram(
-            "nginx_http_request_duration_seconds", "HTTP request latency", {"host"})
-          metric_connections = prometheus:gauge(
-            "nginx_http_connections", "Number of HTTP connections", {"state"})
-        }
-        log_by_lua_block {
-          metric_requests:inc(1, {ngx.var.server_name, ngx.var.status, ngx.var.request_method, ngx.var.cache_status })
-          metric_latency:observe(tonumber(ngx.var.request_time), {ngx.var.server_name})
-        }
-        header_filter_by_lua_block {
-         ngx.header["server"] = nil
-        }
-        sendfile        on;
-        #tcp_nopush     on;
-        client_max_body_size 60M;
-        keepalive_timeout  65s;
-        keepalive_requests 200;
-        # Nginx connection limit per ip
-        limit_conn_zone $binary_remote_addr zone=limitbyaddr:10m;
-        limit_conn_status 429;
-        upstream kong {
-            server kong:8000;
-            keepalive 1000;
-        }
-        upstream encryption {
-            server enc-service:8013;
-            keepalive 1000;
-        }
-        upstream keycloak {
-            server 10.0.2.4:8080;
-            keepalive 1000;
-        }
-        upstream player {
-            server player:3000;
-            keepalive 1000;
-        }
-        include /etc/nginx/defaults.d/*.conf;
-        include /etc/nginx/conf.d/*.conf;
-        #################
-        # Caching Block #
-        #################
-        ##
-        # Keywords
-        #
-        # proxy_cache_path: path to store the cache content
-        # level: how many directories we need, 1:2 means 1 parent directory, and another child directory before the cache content.
-        # keys_zone: name of the cache and size of the keys store in RAM; 1‑MB zone can store data for about 8,000 keys
-        # max_size: size of the cache content in disk
-        # inactive: specifies how long an item can remain in the cache without being accessed. This doesn't value expiry time of cache. So keep it more than the expiry.
-        # use_temp_path: do we have to write the cache to a temp path first? This will reduce the performance.
-        #
-        # caching for images and files
-        proxy_cache_path /tmp/large_cache levels=1:2 keys_zone=large_cache:3m max_size=100m inactive=10m use_temp_path=off;
-        proxy_cache_path /tmp/medium_cache levels=1:2 keys_zone=medium_cache:2m max_size=50m inactive=10m use_temp_path=off;
-        proxy_cache_path /tmp/small_cache levels=1:2 keys_zone=small_cache:1m max_size=10m inactive=10m use_temp_path=off;
-
-       server {
-         listen 9145;
-         location /metrics {
-           content_by_lua_block {
-              metric_connections:set(ngx.var.connections_reading, {"reading"})
-              metric_connections:set(ngx.var.connections_waiting, {"waiting"})
-              metric_connections:set(ngx.var.connections_writing, {"writing"})
-              prometheus:collect()
-            }
-         }
-       }
-    }
+  nginx.conf: |    
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name {{ .Values.domain }};
+      # Limitting open connection per ip
+      limit_conn limitbyaddr 400;
+      return 301 https://{{ .Values.domain }}$request_uri;
+    }  
