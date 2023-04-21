@@ -1,4 +1,8 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-private-ingress.conf
+  namespace: {{ .Release.namespace }}
 data:
   nginx.conf: |
     user  nginx;
@@ -44,13 +48,13 @@ data:
         resolver {{ .Values.kube_dns_ip }};
 
         location /learner/ {
-          set $target http://learner-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://learner-service.dev.svc.cluster.local:9000;
           rewrite ^/learner/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /api/ {
-          set $target http://kong.{{ .Release.namespace }}.svc.cluster.local:8000;
+          set $target http://kong.dev.svc.cluster.local:8000;
           rewrite ^/api/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
@@ -68,93 +72,93 @@ data:
           proxy_pass $target;
         }
         location /admin-api/ {
-          set $target http://kong.{{ .Release.namespace }}.svc.cluster.local:8001;
+          set $target http://kong.dev.svc.cluster.local:8001;
           rewrite ^/admin-api/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /player/ {
-          set $target http://player.{{ .Release.namespace }}.svc.cluster.local:3000;
+          set $target http://player.dev.svc.cluster.local:3000;
           rewrite ^/player/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /knowledgemw/ {
-          set $target http://knowledge-mw-service.{{ .Release.namespace }}.svc.cluster.local:5000;
+          set $target http://knowledge-mw-service.dev.svc.cluster.local:5000;
           rewrite ^/knowledgemw/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /content/ {
-          set $target http://content-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://content-service.dev.svc.cluster.local:9000;
           rewrite ^/content/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /cert/ {
-          set $target http://cert-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://cert-service.dev.svc.cluster.local:9000;
           rewrite ^/cert/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /certreg/ {
-          set $target http://cert-registry-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://cert-registry-service.dev.svc.cluster.local:9000;
           rewrite ^/certreg/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /print/ {
-          set $target http://print-service.{{ .Release.namespace }}.svc.cluster.local:5000;
+          set $target http://print-service.dev.svc.cluster.local:5000;
           rewrite ^/print/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /assessment/ {
-          set $target http://assessment-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://assessment-service.dev.svc.cluster.local:9000;
           rewrite ^/assessment/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /notification/ {
-          set $target http://notification-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://notification-service.dev.svc.cluster.local:9000;
           rewrite ^/notification/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /report/ {
-          set $target http://report-service.{{ .Release.namespace }}.svc.cluster.local:3030;
+          set $target http://report-service.dev.svc.cluster.local:3030;
           rewrite ^/report/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_set_header Host $server_name;
           proxy_pass $target;
         }
         location /search/ {
-          set $target http://search-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://search-service.dev.svc.cluster.local:9000;
           rewrite ^/search/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /lms/ {
-          set $target http://lms-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://lms-service.dev.svc.cluster.local:9000;
           rewrite ^/lms/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
 
         location /taxonomy/ {
-          set $target http://taxonomy-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://taxonomy-service.dev.svc.cluster.local:9000;
           rewrite ^/taxonomy/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /analytics/ {
-          set $target http://analytics-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://analytics-service.dev.svc.cluster.local:9000;
           rewrite ^/analytics/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /enc/ {
-          set $target http://enc-service.{{ .Release.namespace }}.svc.cluster.local:8013;
+          set $target http://enc-service.dev.svc.cluster.local:8013;
           rewrite ^/enc/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
@@ -167,61 +171,61 @@ data:
           proxy_pass $target;
         }
         location /nodebb/ {
-          set $target http://nodebb-service.{{ .Release.namespace }}.svc.cluster.local:4567;
+          set $target http://nodebb-service.dev.svc.cluster.local:4567;
           rewrite ^/enc/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /dial/ {
-          set $target http://dial-service.{{ .Release.namespace }}.svc.cluster.local:9000;
+          set $target http://dial-service.dev.svc.cluster.local:9000;
           rewrite ^/dial/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /inbound-service/ {
-          set $target http://inbound-service.{{ .Release.namespace }}.svc.cluster.local:8085;
+          set $target http://inbound-service.dev.svc.cluster.local:8085;
           rewrite ^/inbound-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /outbound-service/ {
-          set $target http://outbound-service.{{ .Release.namespace }}.svc.cluster.local:9090;
+          set $target http://outbound-service.dev.svc.cluster.local:9090;
           rewrite ^/outbound-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /orchestrator-service/ {
-          set $target http://orchestrator-service.{{ .Release.namespace }}.svc.cluster.local:8686;
+          set $target http://orchestrator-service.dev.svc.cluster.local:8686;
           rewrite ^/orchestrator-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /transformer-service/ {
-          set $target http://transformer-service.{{ .Release.namespace }}.svc.cluster.local:9091;
+          set $target http://transformer-service.dev.svc.cluster.local:9091;
           rewrite ^/transformer-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /federation-service/ {
-          set $target http://federation-service.{{ .Release.namespace }}.svc.cluster.local:9999;
+          set $target http://federation-service.dev.svc.cluster.local:9999;
           rewrite ^/federation-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /gql-service/ {
-          set $target http://gql-service.{{ .Release.namespace }}.svc.cluster.local:8080;
+          set $target http://gql-service.dev.svc.cluster.local:8080;
           rewrite ^/gql-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /uci-service/ {
-          set $target http://uci-service.{{ .Release.namespace }}.svc.cluster.local:9999;
+          set $target http://uci-service.dev.svc.cluster.local:9999;
           rewrite ^/uci-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /uci-transport-socket/ {
-          set $target http://uci-transport-socket-service.{{ .Release.namespace }}.svc.cluster.local:3000;
+          set $target http://uci-transport-socket-service.dev.svc.cluster.local:3000;
           rewrite ^/uci-transport-socket/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_set_header Upgrade $http_upgrade;
@@ -229,39 +233,35 @@ data:
           proxy_pass $target;
         }
         location /ml-survey/ {
-          set $target http://ml-survey-service.{{ .Release.namespace }}.svc.cluster.local:3000;
+          set $target http://ml-survey-service.dev.svc.cluster.local:3000;
           rewrite ^/ml-survey/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /ml-core/ {
-          set $target http://ml-core-service.{{ .Release.namespace }}.svc.cluster.local:3000;
+          set $target http://ml-core-service.dev.svc.cluster.local:3000;
           rewrite ^/ml-core/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /registry-service/ {
-          set $target http://registry-service.{{ .Release.namespace }}.svc.cluster.local:8081;
+          set $target http://registry-service.dev.svc.cluster.local:8081;
           rewrite ^/registry-service/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_set_header Host $server_name;
           proxy_pass $target;
         }
         location /ml-projects/ {
-          set $target http://ml-projects-service.{{ .Release.namespace }}.svc.cluster.local:3000;
+          set $target http://ml-projects-service.dev.svc.cluster.local:3000;
           rewrite ^/ml-projects/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
         location /ml-reports/ {
-          set $target http://ml-reports-service.{{ .Release.namespace }}.svc.cluster.local:3000;
+          set $target http://ml-reports-service.dev.svc.cluster.local:3000;
           rewrite ^/ml-reports/(.*) /$1 break;
           proxy_http_version 1.1;
           proxy_pass $target;
         }
       }
     }
-kind: ConfigMap
-metadata:
-  name: nginx-private-ingress.conf
-  namespace: {{ .Release.namespace }}
