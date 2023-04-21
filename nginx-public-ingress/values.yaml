@@ -4,7 +4,7 @@ nginx_private_ingress_ip: "10.0.1.22"
 domain: sunbirded1.dev.org
 cloud_public_storage_accountname: sunbirddevpublic.blob.core.windows.net
 cloud_public_storage_container: sunbird-content-dev
-
+kube_dns_ip: "10.233.0.1"
 core_vault_proxy_site_key: |+
   -----BEGIN PRIVATE KEY-----
   MIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQCvElFqSylbnMG+
