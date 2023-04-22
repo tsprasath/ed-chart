@@ -43,6 +43,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-roles-config
+  namespace: {{ .Release.Namespace }}
 data:
   roles.json: |-
     {
@@ -91,6 +92,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-clients-config
+  namespace: {{ .Release.Namespace }}
 data: 
   clients.json: |-
     {
@@ -128,8 +130,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-realm-config
+  namespace: {{ .Release.Namespace }}
 data:
-  keycloak-realm.json: |-
+  keycloak-realm.json: |
     {
       "realm": "sunbird",
       "enabled": true,

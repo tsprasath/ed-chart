@@ -48,16 +48,16 @@ spec:
         - name: {{ .Chart.Name }}-data
           mountPath: /opt/jboss/keycloak/standalone/data
         - name: {{ .Chart.Name }}-config
-          mountPath: "/tmp"
+          mountPath: "/opt/jboss/keycloak/standalone/configuration/"
           readOnly: true       
         - name: keycloak-realm
-          mountPath: /tmp/keycloak-realm.json
+          mountPath: /opt/jboss/keycloak/standalone/configuration/keycloak-realm.json
           subPath: keycloak-realm.json
         - name: keycloak-roles
-          mountPath: /tmp/roles.json
+          mountPath: /opt/jboss/keycloak/standalone/configuration/roles.json
           subPath: roles.json
         - name: keycloak-clients
-          mountPath: /tmp/clients.json
+          mountPath: /opt/jboss/keycloak/standalone/configuration/clients.json
           subPath: clients.json             
       volumes:
       - name: {{ .Chart.Name }}-data
@@ -74,4 +74,3 @@ spec:
       - name: keycloak-clients
         configMap:
           name: {{ .Chart.Name }}-clients-config
-
