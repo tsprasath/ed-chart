@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  namespace: {{ .Release.Namespace }}
+data:
+  KEYCLOAK_USER: "{{ .Values.keycloak_user }}"
+  KEYCLOAK_PASSWORD: "{{ .Values.keycloak_password }}"
+  DB_VENDOR: "{{ .Values.db_vendor }}"
+  DB_ADDR: "{{ .Values.db_addr }}"
+  DB_DATABASE: "{{ .Values.db_database }}"
+  DB_USER: {{ .Values.db_user }}
+  DB_PASSWORD: "{{ .Values.db_password }}"
+  DB_HOST: "{{ .Values.db_addr }}"
+  DB_PORT: "5432"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-bootstrap
+data:
+  bootstrap.sh: |
+    #!/bin/bash
+
+    # Set variables
+    KEYCLOAK_AUTH_SERVER_URL={{ .Values.keycloak_auth_server_url }}
+    KEYCLOAK_MANAGEMENT_USER={{ .Values.keycloak_management_user }}
+    KEYCLOAK_MANAGEMENT_PASSWORD={{ .Values.keycloak_management_password }}
+    KEYCLOAK_REALM={{ .Values.keycloak_realm }}
+    KEYCLOAK_REALM_JSON_FILE_PATH={{ .Values.keycloak_realm_json_file_path }}
+    KEYCLOAK_USER_MANAGER_ROLES_JSON_FILE_PATH={{ .Values.keycloak_user_manager_roles_json_file_path }}
+    KEYCLOAK_API_MANAGEMENT_USERNAME={{ .Values.keycloak_api_management_username }}
+    KEYCLOAK_API_MANAGEMENT_USER_EMAIL={{ .Values.keycloak_api_management_user_email }}
+    KEYCLOAK_API_MANAGEMENT_USER_FIRST_NAME={{ .Values.keycloak_api_management_user_first_name }}
+    KEYCLOAK_API_MANAGEMENT_USER_LAST_NAME={{ .Values.keycloak_api_management_user_last_name }}
+    KEYCLOAK_API_MANAGEMENT_USER_PASSWORD={{ .Values.keycloak_api_management_user_password }}
+    KEYCLOAK_CLIENTS={{ .Values.keycloak_clients }}
+
+    # Execute bootstrap script
+    bash -c "/opt/jboss/keycloak/bin/kcadm.sh config credentials --server $KEYCLOAK_AUTH_SERVER_URL --realm master --user $KEYCLOAK_MANAGEMENT_USER --password $KEYCLOAK_MANAGEMENT_PASSWORD && /opt/jboss/keycloak/bin/kcadm.sh create realms -s realm=$KEYCLOAK_REALM -f $KEYCLOAK_REALM_JSON_FILE_PATH && /opt/jboss/keycloak/bin/kcadm.sh create roles -r $KEYCLOAK_REALM -f $KEYCLOAK_USER_MANAGER_ROLES_JSON_FILE_PATH && /opt/jboss/keycloak/bin/kcadm.sh create users -r $KEYCLOAK_REALM -f $KEYCLOAK_API_MANAGEMENT_USER_JSON_FILE_PATH && /opt/jboss/keycloak/bin/kcadm.sh create clients -r $KEYCLOAK_REALM -f $KEYCLOAK_CLIENTS"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-roles-config
+data:
+  roles.json: |-
+    {
+        "realm-management" : [
+            {
+                "id": "3ff462fc-b33c-431a-b54b-861c3298d910",
+                "name": "manage-users",
+                "description": "${role_manage-users}",
+                "scopeParamRequired": false,
+                "composite": false,"clientRole": true,
+                "containerId": "b2f45201-1362-4b10-83c3-207d470f44bf"
+            },
+            {
+                "id": "57118202-c5e5-4c49-829b-c2ed796bfdea",
+                "name": "query-users",
+                "description": "${role_query-users}",
+                "scopeParamRequired": false,
+                "composite": false,
+                "clientRole": true,
+                "containerId": "b2f45201-1362-4b10-83c3-207d470f44bf"
+            },
+            {
+                "id":"46019462-3dc8-46a8-9786-ffcbad293f43",
+                "name":"view-users",
+                "description":"${role_view-users}",
+                "scopeParamRequired":false,
+                "composite":true,
+                "clientRole":true,
+                "containerId":"b2f45201-1362-4b10-83c3-207d470f44bf"
+            }
+        ],
+        "admin-cli": [
+            {
+                "id":"30ab6b4f-b17c-4fff-a5fa-1181686bb409",
+                "name":"admin",
+                "description":"admin role",
+                "scopeParamRequired":false,
+                "composite":true,
+                "clientRole":true,
+                "containerId":"8891d8e9-35e6-4a1c-b32b-027be03b0f24"
+            }
+        ]
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-clients-config
+data: 
+  clients.json: |-
+    {
+      "clients": [
+        {
+          "clientId": "my-app",
+          "enabled": true,
+          "secret": "my-secret",
+          "redirectUris": [
+            "http://localhost:3000/*"
+          ],
+          "webOrigins": [],
+          "publicClient": true,
+          "protocol": "openid-connect",
+          "attributes": {
+            "saml.assertion.signature": "false",
+            "saml.force.post.binding": "false",
+            "saml.multivalued.roles": "false",
+            "saml.encrypt": "false",
+            "saml.server.signature": "false",
+            "saml.server.signature.keyinfo.ext": "false",
+            "saml_force_name_id_format": "false",
+            "saml.client.signature": "false",
+            "saml.authnrequest_signed": "false",
+            "saml.client.signature.keyinfo.ext": "false",
+            "tls.client.certificate.bound.access.tokens": "false"
+          },
+          "authenticationFlowBindingOverrides": {},
+          "fullScopeAllowed": true
+        }
+      ]
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-realm-config
+data:
+  keycloak-realm.json: |-
+    {
+      "realm": "sunbird",
+      "enabled": true,
+      "id": "sunbird",
+      "users": [
+        {
+          "username": "admin",
+          "enabled": true,
+          "credentials": [
+            {
+              "type": "password",
+              "value": "admin",
+              "temporary": false
+            }
+          ],
+          "firstName": "Admin",
+          "lastName": "User"
+        }
+      ],
+      "roles": [
+        {
+          "name": "user",
+          "description": "Regular user role"
+        },
+        {
+          "name": "admin",
+          "description": "Admin user role"
+        }
+      ]
+    }

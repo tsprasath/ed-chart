@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.maxsurge }}
+      maxUnavailable: {{ .Values.strategy.maxunavailable }}  
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      # Running nginx with custom config
+{{- if .Values.imagepullsecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagepullsecrets }}
+{{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.dockerhub }}/{{ .Values.repository }}:{{ .Values.image_tag }}"
+        imagePullPolicy: Always
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+        envFrom:
+          - configMapRef:
+              name: {{ .Chart.Name }}-config                    
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        - name: http-management
+          containerPort: 9990   
+          {{- if .Values.healthcheck }}
+          livenessProbe:
+{{ toYaml .Values.livenessProbe | indent 12 }}
+          readinessProbe:
+{{ toYaml .Values.readinessProbe | indent 12 }}
+          {{- end }}                 
+        volumeMounts:
+        - name: keycloak-data
+          mountPath: /opt/jboss/keycloak/standalone/data
+        - name: config-volume
+          mountPath: "/tmp"
+          readOnly: true       
+        - name: keycloak-realm
+          mountPath: /tmp/keycloak-realm.json
+          subPath: keycloak-realm.json
+        - name: keycloak-roles
+          mountPath: /tmp/roles.json
+          subPath: roles.json
+        - name: keycloak-clients
+          mountPath: /tmp/clients.json
+          subPath: clients.json             
+      volumes:
+      - name: keycloak-data
+        emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: {{ .Chart.Name }}-bootstrap
+      - name: keycloak-realm
+        configMap:
+          name: {{ .Chart.Name }}-realm-config
+      - name: keycloak-roles
+        configMap:
+          name: {{ .Chart.Name }}-roles-config
+      - name: keycloak-clients
+        configMap:
+          name: {{ .Chart.Name }}-clients-config
+
