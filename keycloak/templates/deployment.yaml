@@ -45,9 +45,9 @@ spec:
 {{ toYaml .Values.readinessProbe | indent 12 }}
           {{- end }}                 
         volumeMounts:
-        - name: keycloak-data
+        - name: {{ .Chart.Name }}-data
           mountPath: /opt/jboss/keycloak/standalone/data
-        - name: config-volume
+        - name: {{ .Chart.Name }}-config
           mountPath: "/tmp"
           readOnly: true       
         - name: keycloak-realm
@@ -60,9 +60,9 @@ spec:
           mountPath: /tmp/clients.json
           subPath: clients.json             
       volumes:
-      - name: keycloak-data
+      - name: {{ .Chart.Name }}-data
         emptyDir: {}
-      - name: config-volume
+      - name: {{ .Chart.Name }}-config
         configMap:
           name: {{ .Chart.Name }}-bootstrap
       - name: keycloak-realm
