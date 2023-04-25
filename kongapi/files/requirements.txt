@@ -3,3 +3,4 @@ retry
 argparse
 jwt
 logging
+PyJWT

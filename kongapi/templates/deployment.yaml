@@ -28,7 +28,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.dockerhub }}/{{ .Values.repository }}:{{ .Values.image_tag }}"
-          command: ["sh", "-c", "apt-get update && apt-get install -y python3-pip && apt-get install python3-urllib3 && pip install -r /app/config/requirements.txt && python /app/config/kong_apis.py /app/config/kong-apis.json --kong-admin-api-url={{ .Values.kong_admin_listen }}"]
+          command: ["sh", "-c", "apt-get update && wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python get-pip.py && pip install -r /app/config/requirements.txt && pip install retry && python /app/config/kong_apis.py /kong-apis.json --kong-admin-api-url={{ .Values.kong_admin_listen }}"]
           volumeMounts:
             - name: config
               mountPath: /app/config
