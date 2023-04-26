@@ -411,7 +411,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "f51263b3-61a8-4b8e-b622-dcf5fe13fe40",
           "redirectUris": [
             "https://{{ .Values.domain }}/auth/fusionauth-oidc/callback",
             "https://{{ .Values.domain }}/discussions/*",
@@ -548,7 +548,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "4b9ad5ad-7c52-4be0-879d-2665b37b3cb5",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -814,7 +814,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "0ca3a153-3529-482b-90cf-bb13ea7054aa",
           "redirectUris": [
             "http://localhost:3000/*",
             "http://localhost:3000/content"
@@ -950,7 +950,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "6ddd4118-6795-4119-a948-f61ecd1fb526",
           "redirectUris": [
             "https://{{ .Values.domain }}/*"
           ],
@@ -1259,7 +1259,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "740a0b34-6a47-4203-aeb2-92e2692f63aa",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -1840,7 +1840,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "9ba8b47c-9ece-4068-9d2f-b5bcd67dfdd1",
           "redirectUris": [
             "https://ops.ntp.net.in/*",
             "http://ops.ntp.net.in/content",
@@ -1979,7 +1979,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "8ebd2a28-5be4-4844-ba9f-70a62a0ecb5d",
           "redirectUris": [
             "https://preprod.ntp.net.in/*"
           ],
@@ -2113,7 +2113,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "6db97b0c-8aed-4c50-861b-930ec98a9684",
           "redirectUris": [
             "https://{{ .Values.domain }}/*",
             "https://{{ .Values.domain }}/resources"
@@ -2334,7 +2334,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "eb652ff1-c096-4802-9006-57f11f3dc407",
           "redirectUris": [
             "https://{{ .Values.domain }}/*"
           ],
@@ -2515,7 +2515,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "8ebd2a28-5be4-4844-ba9f-70a62a0ecb5d",
           "redirectUris": [
             "https://dev.sunbirded.org/*"
           ],
@@ -2647,7 +2647,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "945d33ff-1de9-4424-a9a4-ca91e574064d",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -2903,7 +2903,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "78e9aabd-1e26-42b6-9fc9-da917eae40d4",
           "redirectUris": [
             "https://{{ .Values.domain }}/*"
           ],
@@ -3038,7 +3038,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "042ed9da-fc17-43d1-bb4a-820059c2baf4",
           "redirectUris": [
             "https://preprod.ntp.net.in/*"
           ],
@@ -3173,7 +3173,7 @@ data:
           "surrogateAuthRequired": false,
           "enabled": true,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "3040e6cc-17e0-4ee1-b305-b1b34d08877e",
           "defaultRoles": [
             "manage-account",
             "view-profile"
