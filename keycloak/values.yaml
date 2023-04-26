@@ -23,7 +23,7 @@ imagepullsecrets: ""
 dockerhub: docker.io
 
 replicaCount: 1
-# Use jboss/keycloak:7.0.0
+# Using jboss/keycloak:7.0.0
 repository: tsprasath91/keycloak
 image_tag:  latest
 
