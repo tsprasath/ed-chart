@@ -29,21 +29,21 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
         env:
         - name: KEYCLOAK_USER
-          value: "admin"
+          value: "{{ .Values.keycloak_user }}"
         - name : KEYCLOAK_PASSWORD
-          value: "admin"
+          value: "{{ .Values.keycloak_password }}"
         - name : DB_VENDOR
-          value: "postgres"
+          value: "{{ .Values.db_vendor }}"
         - name : DB_ADDR
-          value: "postgres-postgresql.lern.svc.cluster.local"
+          value: "{{ .Values.db_addr }}"
         - name : DB_DATABASE
-          value: "keycloak"
+          value: "{{ .Values.db_database }}"
         - name : DB_USER
-          value: "postgres"
+          value: "{{ .Values.db_user }}"
         - name : DB_PASSWORD
-          value: "postgres"
+          value: "{{ .Values.db_password }}"
         - name : DB_HOST
-          value: "postgres-postgresql.lern.svc.cluster.local" 
+          value: "{{ .Values.db_addr }}"
         - name : DB_PORT
           value: "5432"   
         - name : JAVA_TOOL_OPTIONS
@@ -51,9 +51,7 @@ spec:
         - name: PROXY_ADDRESS_FORWARDING
           value: "true" 
         - name: KEYCLOAK_IMPORT
-          value: "/opt/jboss/keycloak/standalone/configuration/myrealm.json" 
-        - name: DOMAIN
-          value: "test.com"                                     
+          value: "/opt/jboss/keycloak/standalone/configuration/myrealm.json"                                 
         ports:
         - name: http
           containerPort: 8080

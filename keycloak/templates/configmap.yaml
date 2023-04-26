@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: myrealm-config
 data:
-  realm.json: |
+  myrealm.json: |
     {
       "id": "sunbird",
       "realm": "sunbird",
