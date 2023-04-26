@@ -1,0 +1,71 @@
+
+
+# Copy configuration files
+COPY files/templates/keycloak-bootstrap.conf.j2 /tmp/keycloak-bootstrap.conf.j2
+COPY files/templates/keycloak-realm.j2 /tmp/keycloak-realm.j2
+COPY files/python-keycloak-0.12.0/roles.json /tmp/roles.json
+COPY files/python-keycloak-0.12.0/keycloak /tmp/keycloak/
+
+
+# Install Python library
+RUN cd /tmp/python-keycloak-0.12.0 && python setup.py install
+
+
+RUN python /tmp/keycloak/keycloak_patch.py /tmp/keycloak-bootstrap.conf.json
+
+# Add Environment Variables
+ENV sunbird_user_service_base_url https://example.com/user_service
+
+# Remove Old Environment Variables
+RUN sed -i '/sunbird_lms_base_url/d' /etc/environment && \
+    sed -i '/sunbird_authorization/d' /etc/environment && \
+    sed -i '/sunbird_encryption_key/d' /etc/environment && \
+    sed -i '/sunbird_sso_username/d' /etc/environment && \
+    sed -i '/sunbird_sso_password/d' /etc/environment && \
+    sed -i '/sunbird_sso_url/d' /etc/environment && \
+    sed -i '/sunbird_sso_realm/d' /etc/environment && \
+    sed -i '/sunbird_sso_client_id/d' /etc/environment && \
+    sed -i '/sunbird_cassandra_host/d' /etc/environment && \
+    sed -i '/sunbird_cs_base_url/d' /etc/environment
+
+
+# Create Required Directories
+RUN mkdir -p /opt/keycloak/providers \
+             /opt/keycloak/modules/system/layers/keycloak/org/postgresql/main \
+             /opt/keycloak/themes/keycloak/login/messages \
+             /opt/keycloak/themes/keycloak/login/resources/css/fonts/notosans \
+             /opt/keycloak/themes/keycloak/login/resources/css/themes/default/assets/fonts \
+             /opt/keycloak/themes/keycloak/login/resources/img \
+             /opt/keycloak/themes/keycloak/login/resources/js \
+             /opt/keycloak/themes/keycloak/email/html \
+             /opt/keycloak/themes/keycloak/email/messages \
+             /opt/keycloak/themes/keycloak/email/text
+
+# Copy Login Theme
+COPY artifacts/sunbird/login/ /opt/keycloak/themes/keycloak/login
+
+# Copy Email Theme
+COPY artifacts/sunbird/email/ /opt/keycloak/themes/keycloak/email
+
+RUN groupadd keycloak && \
+    useradd -r -g keycloak -d /opt/keycloak -s /sbin/nologin keycloak
+
+RUN chown -R keycloak: /opt/keycloak && \
+    chmod o+x /opt/keycloak/bin/
+
+
+# Create Directory for Sunbird Auth Package Config
+RUN mkdir -p sunbird_auth_1.0v.config
+
+# Keycloak Configuration XML File
+COPY files/templates/standalone-ha.xml roles/keycloak-deploy/templates/standalone-ha.xml
+# RUN envsubst < standalone-ha.xml > sunbird_auth_1.0v.config/standalone-ha.xml && \
+#     rm standalone-ha.xml
+
+WORKDIR /opt/keycloak
+# Expose port 8080 for Keycloak
+EXPOSE 8080
+
+# Start Keycloak
+
+CMD ["bin/standalone.sh", "-b", "0.0.0.0", "-Djboss.bind.address=0.0.0.0", "-Djboss.bind.address.private=0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=singleFile", "-Dkeycloak.migration.file=/tmp/realm-export.json", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.http.port=8080", "-Djboss.https.port=8443", "-Dadmin.username=admin", "-Dadmin.password=admin"]
