@@ -20,16 +20,4 @@ COPY artifacts/sunbird/login /opt/jboss/keycloak/themes/$REALM/login
 # Modify standalone.xml
 # RUN sed -i 's/name="default"/name="standalone-ha"/' /opt/jboss/keycloak/standalone/configuration/standalone.xml
 
-# CMD ["/opt/jboss/keycloak/bin/standalone.sh", "-b", "0.0.0.0", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
-
-
 EXPOSE 8080
-
-# RUN curl -sS https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
-# RUN python get-pip.py
-# RUN python setup.py install
-
-
-# Start Keycloak server
-
-# CMD ["bin/standalone.sh", "-b", "0.0.0.0"]
